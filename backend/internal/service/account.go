@@ -965,6 +965,15 @@ func (a *Account) IsOpenAI() bool {
 	return a.Platform == PlatformOpenAI
 }
 
+func (a *Account) IsQwen() bool {
+	return a.Platform == PlatformQwen
+}
+
+// IsOpenAIProtocolAccount 返回账号是否走 OpenAI 兼容协议（含 Qwen DashScope 兼容模式）。
+func (a *Account) IsOpenAIProtocolAccount() bool {
+	return a.IsOpenAI() || a.IsQwen()
+}
+
 func (a *Account) IsAnthropic() bool {
 	return a.Platform == PlatformAnthropic
 }
@@ -974,17 +983,20 @@ func (a *Account) IsOpenAIOAuth() bool {
 }
 
 func (a *Account) IsOpenAIApiKey() bool {
-	return a.IsOpenAI() && a.Type == AccountTypeAPIKey
+	return (a.IsOpenAI() || a.IsQwen()) && a.Type == AccountTypeAPIKey
 }
 
 func (a *Account) GetOpenAIBaseURL() string {
-	if !a.IsOpenAI() {
+	if !a.IsOpenAIProtocolAccount() {
 		return ""
 	}
 	if a.Type == AccountTypeAPIKey {
 		baseURL := a.GetCredential("base_url")
 		if baseURL != "" {
 			return baseURL
+		}
+		if a.IsQwen() {
+			return DefaultQwenBaseURL
 		}
 	}
 	return "https://api.openai.com"

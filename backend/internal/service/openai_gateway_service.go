@@ -1297,7 +1297,10 @@ func noAvailableOpenAISelectionError(requestedModel string, compactBlocked bool)
 // openAICompactSupportTier classifies an OpenAI account by compact capability.
 // 0 = explicitly unsupported, 1 = unknown / not yet probed, 2 = explicitly supported.
 func openAICompactSupportTier(account *Account) int {
-	if account == nil || !account.IsOpenAI() {
+	if account == nil || !account.IsOpenAIProtocolAccount() {
+		return 0
+	}
+	if account.IsQwen() {
 		return 0
 	}
 	supported, known := account.OpenAICompactSupportKnown()
@@ -1313,7 +1316,7 @@ func openAICompactSupportTier(account *Account) int {
 // isOpenAIAccountEligibleForRequest centralises the schedulable / OpenAI / model /
 // compact-support checks used during account selection.
 func isOpenAIAccountEligibleForRequest(account *Account, requestedModel string, requireCompact bool) bool {
-	if account == nil || !account.IsSchedulable() || !account.IsOpenAI() {
+	if account == nil || !account.IsSchedulable() || !account.IsOpenAIProtocolAccount() {
 		return false
 	}
 	if requestedModel != "" && !account.IsModelSupported(requestedModel) {
@@ -1883,19 +1886,30 @@ func (s *OpenAIGatewayService) selectAccountWithLoadAwareness(ctx context.Contex
 	return nil, ErrNoAvailableAccounts
 }
 
+func (s *OpenAIGatewayService) resolveAccountSchedulingPlatform(ctx context.Context, groupID *int64) string {
+	if groupID != nil && s.schedulerSnapshot != nil {
+		group, err := s.schedulerSnapshot.GetGroupByID(ctx, *groupID)
+		if err == nil && group != nil && IsOpenAIGatewayPlatform(group.Platform) {
+			return group.Platform
+		}
+	}
+	return PlatformOpenAI
+}
+
 func (s *OpenAIGatewayService) listSchedulableAccounts(ctx context.Context, groupID *int64) ([]Account, error) {
+	platform := s.resolveAccountSchedulingPlatform(ctx, groupID)
 	if s.schedulerSnapshot != nil {
-		accounts, _, err := s.schedulerSnapshot.ListSchedulableAccounts(ctx, groupID, PlatformOpenAI, false)
+		accounts, _, err := s.schedulerSnapshot.ListSchedulableAccounts(ctx, groupID, platform, false)
 		return accounts, err
 	}
 	var accounts []Account
 	var err error
 	if s.cfg != nil && s.cfg.RunMode == config.RunModeSimple {
-		accounts, err = s.accountRepo.ListSchedulableByPlatform(ctx, PlatformOpenAI)
+		accounts, err = s.accountRepo.ListSchedulableByPlatform(ctx, platform)
 	} else if groupID != nil {
-		accounts, err = s.accountRepo.ListSchedulableByGroupIDAndPlatform(ctx, *groupID, PlatformOpenAI)
+		accounts, err = s.accountRepo.ListSchedulableByGroupIDAndPlatform(ctx, *groupID, platform)
 	} else {
-		accounts, err = s.accountRepo.ListSchedulableUngroupedByPlatform(ctx, PlatformOpenAI)
+		accounts, err = s.accountRepo.ListSchedulableUngroupedByPlatform(ctx, platform)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("query accounts failed: %w", err)

@@ -89,6 +89,7 @@ const zhipuModels = [
 
 // 阿里 通义千问
 const qwenModels = [
+  'qwen3.7-max', 'qwen3.7-plus',
   'qwen-turbo', 'qwen-plus', 'qwen-max', 'qwen-max-longcontext', 'qwen-long',
   'qwen2-72b-instruct', 'qwen2-57b-a14b-instruct', 'qwen2-7b-instruct',
   'qwen2.5-72b-instruct', 'qwen2.5-32b-instruct', 'qwen2.5-14b-instruct',

@@ -181,6 +181,8 @@ const defaultClientTab = computed(() => {
   switch (props.platform) {
     case 'openai':
       return 'codex'
+    case 'qwen':
+      return 'opencode'
     case 'gemini':
       return 'gemini'
     case 'antigravity':
@@ -282,6 +284,10 @@ const clientTabs = computed((): TabConfig[] => {
         { id: 'gemini', label: t('keys.useKeyModal.cliTabs.geminiCli'), icon: SparkleIcon },
         { id: 'opencode', label: t('keys.useKeyModal.cliTabs.opencode'), icon: TerminalIcon }
       ]
+    case 'qwen':
+      return [
+        { id: 'opencode', label: t('keys.useKeyModal.cliTabs.opencode'), icon: TerminalIcon }
+      ]
     case 'antigravity':
       return [
         { id: 'claude', label: t('keys.useKeyModal.cliTabs.claudeCode'), icon: TerminalIcon },
@@ -328,6 +334,8 @@ const platformDescription = computed(() => {
       return t('keys.useKeyModal.openai.description')
     case 'gemini':
       return t('keys.useKeyModal.gemini.description')
+    case 'qwen':
+      return t('keys.useKeyModal.qwen.description')
     case 'antigravity':
       return t('keys.useKeyModal.antigravity.description')
     default:
@@ -346,6 +354,8 @@ const platformNote = computed(() => {
         : t('keys.useKeyModal.openai.note')
     case 'gemini':
       return t('keys.useKeyModal.gemini.note')
+    case 'qwen':
+      return t('keys.useKeyModal.qwen.note')
     case 'antigravity':
       return activeClientTab.value === 'claude'
         ? t('keys.useKeyModal.antigravity.claudeNote')
@@ -400,6 +410,8 @@ const currentFiles = computed((): FileConfig[] => {
         return [generateOpenCodeConfig('anthropic', apiBase, apiKey)]
       case 'openai':
         return [generateOpenCodeConfig('openai', apiBase, apiKey)]
+      case 'qwen':
+        return [generateOpenCodeConfig('qwen', apiBase, apiKey)]
       case 'gemini':
         return [generateOpenCodeConfig('gemini', geminiBase, apiKey)]
       case 'antigravity':
@@ -1017,10 +1029,20 @@ function generateOpenCodeConfig(platform: string, baseUrl: string, apiKey: strin
     provider[platform].models = antigravityGeminiModels
   } else if (platform === 'openai') {
     provider[platform].models = openaiModels
+  } else if (platform === 'qwen') {
+    provider[platform].npm = 'openai'
+    provider[platform].name = 'Qwen'
+    provider[platform].models = {
+      'qwen3.7-max': { name: 'Qwen 3.7 Max' },
+      'qwen-max': { name: 'Qwen Max' },
+      'qwen-plus': { name: 'Qwen Plus' },
+      'qwen-turbo': { name: 'Qwen Turbo' },
+      'qwen2.5-72b-instruct': { name: 'Qwen 2.5 72B' },
+    }
   }
 
   const agent =
-    platform === 'openai'
+    platform === 'openai' || platform === 'qwen'
       ? {
           build: {
             options: {

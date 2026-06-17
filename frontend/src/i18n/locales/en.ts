@@ -766,6 +766,10 @@ export default {
         modelComment: 'If you have Gemini 3 access, you can use: gemini-3-pro-preview',
         note: 'These environment variables will be active in the current terminal session. For permanent configuration, add them to ~/.bashrc, ~/.zshrc, or the appropriate configuration file.',
       },
+      qwen: {
+        description: 'Qwen groups use the OpenAI-compatible API. Access via /v1/chat/completions or configure in clients like OpenCode.',
+        note: 'Ensure this API key is assigned to a platform=qwen group with Qwen accounts configured.',
+      },
       opencode: {
         title: 'OpenCode Example',
         subtitle: 'opencode.json',
@@ -2149,6 +2153,7 @@ export default {
         openai: 'OpenAI',
         gemini: 'Gemini',
         antigravity: 'Antigravity',
+        qwen: 'Qwen',
       },
       deleteConfirm:
         "Are you sure you want to delete '{name}'? All associated API keys will no longer belong to any group.",
@@ -3022,6 +3027,7 @@ export default {
         openai: 'OpenAI',
         gemini: 'Gemini',
         antigravity: 'Antigravity',
+        qwen: 'Qwen',
       },
       types: {
         oauth: 'OAuth',
@@ -3289,6 +3295,19 @@ export default {
       apiKeyRequired: 'API Key *',
       apiKeyPlaceholder: 'sk-ant-api03-...',
       apiKeyHint: 'Your Claude Console API Key',
+      qwen: {
+        apiKeyHint: 'Create an API Key (sk-...) in Bailian console after login, then paste here',
+        baseUrlHint: 'Leave empty for China DashScope endpoint; use https://dashscope-intl.aliyuncs.com/compatible-mode/v1 for international',
+        apiKeyLabel: 'DashScope API Key',
+        dashscopeTitle: 'DashScope Pay-as-you-go',
+        dashscopeDesc: 'Bailian console API Key, supports qwen3.7-max and full model list',
+        codingPlanTitle: 'Coding Plan Subscription',
+        codingPlanDesc: 'Coding Plan exclusive Key for Claude Code / Cursor etc.',
+        codingPlanBaseUrlHint: 'Default Coding Plan OpenAI-compatible endpoint, usually no change needed',
+        codingPlanApiKeyHint: 'Copy exclusive API Key from Bailian Coding Plan page after login',
+        noOAuthHint:
+          'Qwen/Bailian does not offer ChatGPT-style OAuth browser authorization. Log in to Alibaba Bailian console first, then paste your API Key or Coding Plan Key below.',
+      },
       // OpenAI specific hints
       openai: {
         baseUrlHint: 'Leave default for official OpenAI API',

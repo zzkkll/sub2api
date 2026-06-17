@@ -769,6 +769,10 @@ export default {
         modelComment: '如果你有 Gemini 3 权限可以填：gemini-3-pro-preview',
         note: '这些环境变量将在当前终端会话中生效。如需永久配置，请将其添加到 ~/.bashrc、~/.zshrc 或相应的配置文件中。'
       },
+      qwen: {
+        description: 'Qwen 分组使用 OpenAI 兼容 API。请通过 /v1/chat/completions 端点访问，或在 OpenCode 等客户端中配置。',
+        note: '请确保 API 密钥已绑定 platform=qwen 的分组，且分组内已添加 Qwen 账号。'
+      },
       opencode: {
         title: 'OpenCode 配置示例',
         subtitle: 'opencode.json',
@@ -2177,6 +2181,7 @@ export default {
         openai: 'OpenAI',
         gemini: 'Gemini',
         antigravity: 'Antigravity',
+        qwen: 'Qwen',
       },
       saving: '保存中...',
       noGroups: '暂无分组',
@@ -3207,6 +3212,7 @@ export default {
         anthropic: 'Anthropic',
         gemini: 'Gemini',
         antigravity: 'Antigravity',
+        qwen: 'Qwen',
       },
       types: {
         oauth: 'OAuth',
@@ -3437,6 +3443,19 @@ export default {
       apiKeyRequired: 'API Key *',
       apiKeyPlaceholder: 'sk-ant-api03-...',
       apiKeyHint: '您的 Claude Console API Key',
+      qwen: {
+        apiKeyHint: '登录百炼控制台后创建 API Key（sk-...），粘贴到此处',
+        baseUrlHint: '留空使用 DashScope 国内兼容端点；国际版请填写 https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
+        apiKeyLabel: 'DashScope API Key',
+        dashscopeTitle: 'DashScope 按量',
+        dashscopeDesc: '百炼控制台 API Key，支持 qwen3.7-max 等全量模型',
+        codingPlanTitle: 'Coding Plan 订阅',
+        codingPlanDesc: '编程套餐专属 Key，适合 Claude Code / Cursor 等工具',
+        codingPlanBaseUrlHint: '默认 Coding Plan OpenAI 兼容端点，一般无需修改',
+        codingPlanApiKeyHint: '在百炼 Coding Plan 页面登录后复制专属 API Key',
+        noOAuthHint:
+          '通义千问/百炼目前不提供类似 ChatGPT 的 OAuth 浏览器授权。请先在阿里云百炼控制台登录账号，再复制 API Key 或 Coding Plan Key 填入下方。',
+      },
       // OpenAI specific hints
       openai: {
         baseUrlHint: '留空使用官方 OpenAI API',

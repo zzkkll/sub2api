@@ -22,7 +22,11 @@ const (
 	PlatformOpenAI      = "openai"
 	PlatformGemini      = "gemini"
 	PlatformAntigravity = "antigravity"
+	PlatformQwen        = "qwen"
 )
+
+// DefaultQwenBaseURL 是通义千问 DashScope OpenAI 兼容模式默认端点。
+const DefaultQwenBaseURL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 // Account type constants
 const (

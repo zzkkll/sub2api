@@ -41,7 +41,11 @@ const (
 	PlatformOpenAI      = domain.PlatformOpenAI
 	PlatformGemini      = domain.PlatformGemini
 	PlatformAntigravity = domain.PlatformAntigravity
+	PlatformQwen        = domain.PlatformQwen
 )
+
+// DefaultQwenBaseURL 是通义千问 DashScope OpenAI 兼容模式默认端点。
+const DefaultQwenBaseURL = domain.DefaultQwenBaseURL
 
 // AllowedQuotaPlatforms 是允许设置 user × platform quota 的平台列表（单一权威来源）。
 // ent/schema/user_platform_quota.go 的 Validate 函数独立维护（构建期约束），
@@ -51,6 +55,12 @@ var AllowedQuotaPlatforms = []string{
 	PlatformOpenAI,
 	PlatformGemini,
 	PlatformAntigravity,
+	PlatformQwen,
+}
+
+// IsOpenAIGatewayPlatform 报告 platform 是否走 OpenAI 协议网关（含 Qwen 兼容模式）。
+func IsOpenAIGatewayPlatform(platform string) bool {
+	return platform == PlatformOpenAI || platform == PlatformQwen
 }
 
 // IsAllowedQuotaPlatform 报告 s 是否为合法的 quota platform 标识。
